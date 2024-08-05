@@ -604,6 +604,12 @@ class CAR(Platforms):
     flags=HyundaiFlags.CHECKSUM_CRC8,
     spFlags=HyundaiFlagsSP.SP_NON_SCC | HyundaiFlagsSP.SP_NON_SCC_FCA,
   )
+  KIA_SPORTAGE_5TH_GEN_NON_SCC = HyundaiCanFDPlatformConfig(
+    [HyundaiCarDocs("Kia Sportage Non-SCC 2023-24", "No Smart Cruise Control (SCC)", car_parts=CarParts.common([CarHarness.hyundai_n]))],    
+    KIA_SPORTAGE_5TH_GEN.specs,
+    flags=HyundaiFlags.CHECKSUM_CRC8,
+    spFlags=HyundaiFlagsSP.SP_NON_SCC | HyundaiFlagsSP.SP_NON_SCC_FCA,
+  )
   GENESIS_G70_2021_NON_SCC = HyundaiPlatformConfig(
     [HyundaiCarDocs("Genesis G70 Non-SCC 2021", "No Smart Cruise Control (SCC)", car_parts=CarParts.common([CarHarness.hyundai_f]))],
     GENESIS_G70_2020.specs,
