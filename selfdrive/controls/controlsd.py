@@ -877,8 +877,8 @@ class Controls:
 
     controlsState.longitudinalPlanMonoTime = self.sm.logMonoTime['longitudinalPlan']
     controlsState.lateralPlanMonoTime = self.sm.logMonoTime[dh]
-    controlsState.enabled = not (CS.brakePressed and (not self.CS_prev.brakePressed or not CS.standstill)) and (self.enabled or CS.cruiseState.enabled) and CS.gearShifter not in [GearShifter.park, GearShifter.reverse]
-    controlsState.active = not (CS.brakePressed and (not self.CS_prev.brakePressed or not CS.standstill)) and (self.active or CS.cruiseState.enabled)
+    controlsState.enabled = not (CS.brakePressed and (not self.CS_prev.brakePressed or not CS.standstill)) and self.enabled or CS.cruiseState.enabled and CS.gearShifter not in [GearShifter.park, GearShifter.reverse]
+    controlsState.active = not (CS.brakePressed and (not self.CS_prev.brakePressed or not CS.standstill)) and self.active
     controlsState.curvature = curvature
     controlsState.desiredCurvature = self.desired_curvature
     controlsState.state = self.state
