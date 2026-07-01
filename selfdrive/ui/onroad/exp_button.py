@@ -1,5 +1,6 @@
 import time
 import pyray as rl
+from openpilot.common.filter_simple import FirstOrderFilter
 from openpilot.common.params import Params
 from openpilot.selfdrive.ui.ui_state import ui_state
 from openpilot.system.ui.lib.application import gui_app
@@ -22,6 +23,7 @@ class ExpButton(Widget):
     self._black_bg: rl.Color = rl.Color(0, 0, 0, 166)
     self._txt_wheel: rl.Texture = gui_app.texture('icons/chffr_wheel.png', icon_size, icon_size)
     self._txt_exp: rl.Texture = gui_app.texture('icons/experimental.png', icon_size, icon_size)
+    self._rotation_filter = FirstOrderFilter(0, 0.1, 1 / gui_app.target_fps)
     self._rect = rl.Rectangle(0, 0, button_size, button_size)
 
   def set_rect(self, rect: rl.Rectangle) -> None:
@@ -48,9 +50,14 @@ class ExpButton(Widget):
 
     self._white_color.a = 180 if self.is_pressed or not self._engageable else 255
 
-    texture = self._txt_exp if self._held_or_actual_mode() else self._txt_wheel
+    is_wheel = not self._held_or_actual_mode()
+    texture = self._txt_wheel if is_wheel else self._txt_exp
+    # wheel icon tracks the real steering angle (positive angle = left turn = CCW on screen)
+    rotation = self._rotation_filter.update(-ui_state.sm['carState'].steeringAngleDeg) if is_wheel else 0.0
     rl.draw_circle(center_x, center_y, self._rect.width / 2, self._black_bg)
-    rl.draw_texture_ex(texture, rl.Vector2(center_x - texture.width / 2, center_y - texture.height / 2), 0.0, 1.0, self._white_color)
+    src_rect = rl.Rectangle(0, 0, texture.width, texture.height)
+    dest_rect = rl.Rectangle(center_x, center_y, texture.width, texture.height)
+    rl.draw_texture_pro(texture, src_rect, dest_rect, rl.Vector2(texture.width / 2, texture.height / 2), rotation, self._white_color)
 
   def _held_or_actual_mode(self):
     now = time.monotonic()
