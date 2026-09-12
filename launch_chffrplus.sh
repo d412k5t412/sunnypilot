@@ -4,6 +4,10 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 source "$DIR/launch_env.sh"
 
+if [ -f /AGNOS ] && ! python3 -c "import serial" 2>/dev/null; then
+  pip install pyserial --break-system-packages 2>/dev/null || true
+fi
+
 function agnos_init {
   # TODO: move this to agnos
   sudo rm -f /data/etc/NetworkManager/system-connections/*.nmmeta

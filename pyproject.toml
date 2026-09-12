@@ -19,6 +19,7 @@ dependencies = [
   "sounddevice",  # micd + soundd
   "requests",     # many one-off uses
   "tqdm",         # cars (fw_versions.py) on start + many one-off uses
+  "pyserial",     # comma updater bundle (tici/lpa.py) and modem.py
 
   # core
   "scons==4.10.1",  # 4.11 removed the qt3 tool still used to build Cabana
